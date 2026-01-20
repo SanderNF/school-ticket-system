@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        div {
+            background-color: black;
+            width: fit-content;
+            padding: 10px;
+            margin: 30px;
+        }
+    </style>
+</head>
+<body>
+    <div>
+        {{ data }}
+        {% if data.person %}
+            <h4>Sender: {{ data.person }}</h4>
+        {% else %}
+            <h4>Unknown sender.</h4>
+        {% endif %}
+        <h1>{{ data.title }}</h1>
+        <p>{{ data.body }}</p>
+    </div>
+    
+</body>
+</html>

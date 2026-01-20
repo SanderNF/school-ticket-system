@@ -83,13 +83,21 @@ def index():
     #print(data)
     return render_template('index.html', data=data)
 
+@app.route('/ticket/<path:path>')
+def ticket(path):
+    data = temp.data[path]
+    print(data)
+    #data = json.dumps(data)
+    #print(data)
+    return render_template('ticket.html', data=data)
+
 
 @app.route('/new/ticket', methods=['POST'])
 def GenerateNewTicket(callback=None):
     data = request.json
     print(f"data is type: {type(data)}")
     newTicket(data)
-    return None
+    return redirect('/')
 
 
 
