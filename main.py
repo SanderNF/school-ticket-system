@@ -7,6 +7,7 @@ app = Flask(__name__)
 
 class temp:
     data= {}
+    users= {}
 
 
 
@@ -77,19 +78,76 @@ def newTicket(ticket):
 
 @app.route('/')
 def index():
-    data = temp.data
-    print(data)
-    #data = json.dumps(data)
-    #print(data)
+    user=request.args.get('user')
+    hash=request.args.get('hash')
+    print(request.args)
+    userDict = temp.users
+    if user != None:
+        
+        try:
+            if userDict[user]["hash"] == hash:
+                print("auth ok")
+            else:
+                print("auth failed")
+        except:
+            userDict[user] = {"hash": hash}
+            writeData(userDict, "users.json")
+            temp.users = readData("users.json")
+            print("user does not exist")
+        tmpdata = temp.data
+        #print(tmpdata)
+        #data = json.dumps(data)
+        #print(data)
+        data = {}
+        if userDict[user]["admin"]:
+            data = tmpdata
+        else:
+            for i in tmpdata:
+                j = tmpdata[i]
+                for k in j["users"]:
+                    if user == k:
+                        data[i] = j
+    else:
+        data={}
     return render_template('index.html', data=data)
 
 @app.route('/ticket/<path:path>')
 def ticket(path):
-    data = temp.data[path]
-    print(data)
-    #data = json.dumps(data)
+    user=request.args.get('user')
+    hash=request.args.get('hash')
+    print(request.args)
+    userDict = temp.users
+    isAdmin=False
+    if user != None:
+        
+        try:
+            if userDict[user]["hash"] == hash:
+                print("auth ok")
+            else:
+                print("auth failed")
+        except:
+            userDict[user] = {"hash": hash, "admin": False}
+            writeData(userDict, "users.json")
+            temp.users = readData("users.json")
+            print("user does not exist")
+        tmpdata = temp.data[path]
+        #print(tmpdata)
+        #data = json.dumps(data)
+        #print(data)
+        data = {}
+        if userDict[user]["admin"]:
+            data = tmpdata
+            isAdmin = True
+        else:
+            if user in tmpdata["users"]:
+                data = tmpdata
+    else:
+        data={}
+    #data = temp.data[path]
     #print(data)
-    return render_template('ticket.html', data=data)
+    #data = json.dumps(data)
+    print(data)
+    return render_template('ticket.html', data=data, isAdmin=isAdmin)
 
 
 @app.route('/new/ticket', methods=['POST'])
@@ -113,4 +171,5 @@ if __name__ == '__main__':
     #temp.data = readData("data.json")
     #newTicket("test")
     temp.data = readData("data.json")
+    temp.users = readData("users.json")
     app.run(host='0.0.0.0', port=5501, debug=True)

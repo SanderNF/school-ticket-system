@@ -5,31 +5,131 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <style>
+        @font-face {
+            font-family: "Terminus";
+            src: url("{{ url_for('static', filename='/fonts/Terminus/TerminessNerdFontPropo-Regular.ttf') }}");
+        }
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            background-color: #333;
+            padding: 0;
+            margin: 0;
+            color: aliceblue;
+            font-family: "Terminus", Arial, Helvetica, sans-serif;
+        }
         div {
-            background-color: black;
+            background-color: #181818;
             width: fit-content;
             padding: 10px;
-            margin: 30px;
+            margin: 0px, 30px;
+            border: 1px, solid, #757575;
+        }
+        div div {
+            padding: 0;
+            margin: 0;
+            border: none;
+        }
+        textarea {
+            background-color: #333;
+            color: aliceblue;
+            width: 100%;
+            min-width: none;
+            min-height: 24px;
+            margin: 0;
+            padding: 2px 4px;
+            font-family: "Terminus", Arial, Helvetica, sans-serif;
+            font-size: 120%;
+            resize: none;
+        }
+        button {
+            background-color: #333;
+            color: aliceblue;
+            border: 1px, solid, #757575;
+            cursor: pointer;
+            font-family: "Terminus", Arial, Helvetica, sans-serif;
+        }
+        button:hover {
+            background-color: #444;
+        }
+        p {
+            font-size: 150%;
+            margin: 15px 10px;
+        }
+        h1 {
+            font-size: 250%;
+            margin: 10px 30px;
+        }
+        h2 {
+            font-size: 190%;
+            margin: 5px 10px;
+        }
+        h3 {
+            font-size: 180%;
+            margin: 5px 10px;
+        }
+        h4 {
+            font-size: 170%;
+            margin: 5px 10px;
+        }
+        a {
+            margin: 10px;
+        }
+        li {
+            margin: 5px 40px;
+        }
+        .Ticket {
+            width: 100vh;
+            max-width: 90vw;
+            min-width: 80vw;
+        }
+        .NewTicket {
+            width: 100vh;
+            max-width: 90vw;
+            min-width: 80vw;
+            position: sticky;
+            top: 0;
         }
     </style>
 </head>
 <body>
-    <h2>New ticket</h2>
-    <textarea name="Sender" id="newTicketSender"></textarea>
-    <textarea name="Title" id="newTicketTittle"></textarea>
-    <textarea name="body" id="newTicketBody"></textarea>
-    <button onclick="newTicket()"><h3>create new ticket</h3></button>
+    <script src="{{ url_for('static', filename='/auth.js') }}"></script>
+    <div class="NewTicket">
+        <h2 style="justify-self: center;margin: 12px;">New ticket</h2>
+        <div style="display: flex;flex-direction: row;">
+            <div style="display: flex;flex-direction: column;">
+                <div style="display: flex;flex-direction: row;width: 100%;">
+                    <textarea name="Sender" id="newTicketSender" placeholder="Sender"></textarea>
+                    <textarea name="Email" id="newTicketEmail" placeholder="E-Mail"></textarea>
+                    <textarea name="Title" id="newTicketTittle" placeholder="Title"></textarea>
+                </div>
+                <div style="display: flex;flex-direction: row;width: 100%;">
+                    <textarea name="body" id="newTicketBody" placeholder="body" style="min-width: 290px;min-height: 50px;resize: vertical;"></textarea>
+                </div>
+            </div>
+            <button onclick="newTicket()" style="margin-left: 5px;"><h2>Create New Ticket</h2></button>
+        </div>
+    </div>
     {% for item in data %}
-        <div>
-            {{ data[item] }}
+        <div class="Ticket">
+            
             {% if data[item].person %}
                 <h4>Sender: {{ data[item].person }}</h4>
             {% else %}
                 <h4>Unknown sender.</h4>
             {% endif %}
+            {% if data[item].email %}
+                <li>{{ data[item].email }}</li>
+            {% else %}
+                <li>Unknown E-Mail.</li>
+            {% endif %}
+            
             <h1>{{ data[item].title }}</h1>
             <p>{{ data[item].body }}</p>
             <a href="/ticket/{{ item }}">Ticket</a>
+            {{ data[item].status }}
         </div>
     {% endfor %}
     <script>
@@ -41,7 +141,7 @@
             formData.append('sender', sender);
             formData.append('title', title);
             formData.append('body', body);
-            json = JSON.stringify({"sender":sender,"title":title,"body": body})
+            json = JSON.stringify({"sender":sender,"title":title,"body": body,"status": "open","users":[localStorage.getItem("UserName")]})
             fetch('/new/ticket', {
                 headers: {
                     'Accept': 'application/json',

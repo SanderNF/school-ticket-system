@@ -5,24 +5,91 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <style>
+        @font-face {
+            font-family: "Terminus";
+            src: url("{{ url_for('static', filename='/fonts/Terminus/TerminessNerdFontPropo-Regular.ttf') }}");
+        }
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            background-color: #333;
+            padding: 0;
+            margin: 0;
+            color: aliceblue;
+            font-family: "Terminus", Arial, Helvetica, sans-serif;
+        }
         div {
-            background-color: black;
+            background-color: #181818;
             width: fit-content;
             padding: 10px;
-            margin: 30px;
+            margin: 0px, 30px;
+            border: 1px, solid, #757575;
+        }
+        div div {
+            padding: 0;
+            margin: 0;
+            border: none;
+        }
+        p {
+            font-size: 150%;
+            margin: 15px 10px;
+        }
+        h1 {
+            font-size: 250%;
+            margin: 10px 30px;
+        }
+        h2 {
+            font-size: 190%;
+            margin: 5px 10px;
+        }
+        h3 {
+            font-size: 180%;
+            margin: 5px 10px;
+        }
+        h4 {
+            font-size: 170%;
+            margin: 5px 10px;
+        }
+        a {
+            margin: 10px;
+        }
+        li {
+            margin: 5px 40px;
+        }
+        .Ticket {
+            width: 100vh;
+            max-width: 90vw;
+            min-width: 80vw;
         }
     </style>
 </head>
 <body>
+    <script src="{{ url_for('static', filename='/auth.js') }}"></script>
     <div>
-        {{ data }}
         {% if data.person %}
             <h4>Sender: {{ data.person }}</h4>
         {% else %}
             <h4>Unknown sender.</h4>
         {% endif %}
+        {% if data.email %}
+                <li>{{ data.email }}</li>
+            {% else %}
+                <li>Unknown E-Mail.</li>
+            {% endif %}
         <h1>{{ data.title }}</h1>
         <p>{{ data.body }}</p>
+        {% if isAdmin %}
+            <select name="status" id="status-select" onchange="">
+                <option value="">{{ data.status }}</option>
+                <option value="open">Make: open</option>
+                <option value="wip">Make: wip</option>
+                <option value="closed">Make: closed</option>
+            </select>
+        {% else %}
+            {{ data.status }}
+        {% endif %}
     </div>
     
 </body>
