@@ -81,7 +81,7 @@
         <h1>{{ data.title }}</h1>
         <p>{{ data.body }}</p>
         {% if isAdmin %}
-            <select name="status" id="status-select" onchange="">
+            <select name="status" id="status-select" onchange="changeStatus()">
                 <option value="">{{ data.status }}</option>
                 <option value="open">Make: open</option>
                 <option value="wip">Make: wip</option>
@@ -92,5 +92,24 @@
         {% endif %}
     </div>
     
+
+    {% if isAdmin %}
+        <script>
+            function changeStatus() {
+                status = document.getElementsByName("status")[0].value
+                console.log(document.getElementsByName("status"))
+                json = JSON.stringify({"status": status})
+                fetch(window.location.href, {
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    method: 'POST',
+                    body: json,
+                })
+                window.location.reload()
+            }
+        </script>
+    {% endif %}
 </body>
 </html>
