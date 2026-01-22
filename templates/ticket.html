@@ -32,6 +32,35 @@
             margin: 0;
             border: none;
         }
+        select {
+            background-color: #333;
+            color: aliceblue;
+            font-family: "Terminus", Arial, Helvetica, sans-serif;
+            font-size: 100%;
+            resize: none;
+        }
+        textarea {
+            background-color: #333;
+            color: aliceblue;
+            width: 100%;
+            min-width: none;
+            min-height: 24px;
+            margin: 0;
+            padding: 2px 4px;
+            font-family: "Terminus", Arial, Helvetica, sans-serif;
+            font-size: 120%;
+            resize: none;
+        }
+        button {
+            background-color: #333;
+            color: aliceblue;
+            border: 1px, solid, #757575;
+            cursor: pointer;
+            font-family: "Terminus", Arial, Helvetica, sans-serif;
+        }
+        button:hover {
+            background-color: #444;
+        }
         p {
             font-size: 150%;
             margin: 15px 10px;
@@ -63,11 +92,33 @@
             max-width: 90vw;
             min-width: 80vw;
         }
+        .NewMessage {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100vh;
+            max-width: 90vw;
+            min-width: 80vw;
+            position: sticky;
+            bottom: 0;
+        }
+        .Azure {
+            color: hsl(201, 55%, 60%);
+            font-weight: 600;
+        }
+        .Purple {
+            color: hsl(310, 45%, 60%);
+            font-weight: 600;
+        }
+        .Green {
+            color: hsl(120, 45%, 60%);
+            font-weight: 600;
+        }
     </style>
 </head>
 <body>
     <script src="{{ url_for('static', filename='/auth.js') }}"></script>
-    <div>
+    <div class="Ticket">
         {% if data.person %}
             <h4>Sender: {{ data.person }}</h4>
         {% else %}
@@ -82,17 +133,66 @@
         <p>{{ data.body }}</p>
         {% if isAdmin %}
             <select name="status" id="status-select" onchange="changeStatus()">
-                <option value="">{{ data.status }}</option>
-                <option value="open">Make: open</option>
-                <option value="wip">Make: wip</option>
-                <option value="closed">Make: closed</option>
+                {% if data.status == "open" %}
+                <option value="" class="Azure">Open 
+            {% elif data.status == "wip" %}
+                <option value="" class="Purple">W.I.P 
+            {% elif data.status == "closed" %}
+                <option value="" class="Green">Closed 
+            {% endif %}</option>
+                <option value="open" class="Azure">Make: Open </option>
+                <option value="wip" class="Purple">Make: W.I.P </option>
+                <option value="closed" class="Green">Make: Closed </option>
             </select>
         {% else %}
-            {{ data.status }}
+            {% if data.status == "open" %}
+                <li class="Azure">Open </li>
+            {% elif data.status == "wip" %}
+                <li class="Purple">W.I.P </li>
+            {% elif data.status == "closed" %}
+                <li class="Green">Closed </li>
+            {% endif %}
         {% endif %}
+    </div>
+
+
+    {% for item in data.comments %}
+        <div class="Ticket">
+            
+            {% if item.user %}
+                <h4>Sender: {{ item.user }}</h4>
+            {% else %}
+                <h4>Unknown sender.</h4>
+            {% endif %}
+            <p>{{ item.message }}</p>
+        </div>
+    {% endfor %}
+
+    <div class="NewMessage" style="display: flex;flex-direction: row;">
+        <textarea name="NewMessage" id="NewMessage" placeholder="New Message" style="width: 100%;min-height: 50px;resize: vertical;"></textarea>
+        <button onclick="NewMessage()" style="margin-left: 5px;"><h2>Create New Ticket</h2></button>
     </div>
     
 
+
+
+    <script>
+        function NewMessage() {
+            message = document.getElementsByName("NewMessage")[0].value
+            console.log(document.getElementsByName("NewMessage"))
+            json = JSON.stringify({"message": {"user": localStorage.getItem("UserName"), "message":message}})
+            tempURL = window.location.href.split("?")
+            fetch((tempURL[0]+"/newMessage?"+tempURL[1]), {
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                method: 'POST',
+                body: json,
+            })
+            window.location.reload()
+        }
+    </script>
     {% if isAdmin %}
         <script>
             function changeStatus() {

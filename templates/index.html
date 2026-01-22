@@ -7,7 +7,7 @@
     <style>
         @font-face {
             font-family: "Terminus";
-            src: url("{{ url_for('static', filename='/fonts/Terminus/TerminessNerdFontPropo-Regular.ttf') }}");
+            src: url("{{ url_for('static', filename='/fonts/Terminus/TerminessNerdFont-Regular.ttf') }}");
         }
         body {
             display: flex;
@@ -79,6 +79,7 @@
         }
         li {
             margin: 5px 40px;
+            padding: 5px;
         }
         .Ticket {
             width: 100vh;
@@ -94,6 +95,18 @@
             min-width: 80vw;
             position: sticky;
             top: 0;
+        }
+        .Azure {
+            color: hsl(201, 55%, 60%);
+            font-weight: 600;
+        }
+        .Purple {
+            color: hsl(310, 45%, 60%);
+            font-weight: 600;
+        }
+        .Green {
+            color: hsl(120, 45%, 60%);
+            font-weight: 600;
         }
     </style>
 </head>
@@ -132,7 +145,13 @@
             <h1>{{ data[item].title }}</h1>
             <p>{{ data[item].body }}</p>
             <a href="/ticket/{{ item }}">Ticket</a>
-            {{ data[item].status }}
+            {% if data[item].status == "open" %}
+                <li class="Azure">Open </li>
+            {% elif data[item].status == "wip" %}
+                <li class="Purple">W.I.P </li>
+            {% elif data[item].status == "closed" %}
+                <li class="Green">Closed </li>
+            {% endif %}
         </div>
     {% endfor %}
     <script>

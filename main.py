@@ -1,5 +1,5 @@
 import json
-from flask import Flask, render_template, request, redirect, Response, stream_with_context
+from flask import Flask, render_template, request, redirect, Response, stream_with_context, request_finished
 
 
 
@@ -21,8 +21,8 @@ def testLCG(numb=10):
     tmp=1
     for i in range(numb):
         tmp=LCG(tmp)
-        print("hex:"+Numb2HexStr(tmp))
-        print("numb:"+str(Hex2Numb(Numb2HexStr(tmp))))
+        #print("hex:"+Numb2HexStr(tmp))
+        #print("numb:"+str(Hex2Numb(Numb2HexStr(tmp))))
 
 def Numb2HexStr(numb):
     hexNumb = hex(numb)
@@ -30,17 +30,17 @@ def Numb2HexStr(numb):
     return(hexNumb + ("0"*(10-len(hexNumb))))
 
 def Hex2Numb(Hex):
-    print((int(Hex, 0)))
+    #print((int(Hex, 0)))
     return (int(Hex, 0))
 
 
 def nextTicketId(data):
-    print(data)
-    print(len(data))
+    #print(data)
+    #print(len(data))
     if len(data) == 0:
         return Numb2HexStr(1)
     last=list(data)[-1]
-    print(last)
+    #print(last)
     lastNumb = Hex2Numb(last)
     return Numb2HexStr(LCG(lastNumb))
 
@@ -80,7 +80,7 @@ def newTicket(ticket):
 def index():
     user=request.args.get('user')
     hash=request.args.get('hash')
-    print(request.args)
+    #print(request.args)
     userDict = temp.users
     if user != None:
         
@@ -115,7 +115,7 @@ def index():
 def ticket(path):
     user=request.args.get('user')
     hash=request.args.get('hash')
-    print(request.args)
+    #print(request.args)
     userDict = temp.users
     isAdmin=False
     if user != None:
@@ -153,9 +153,9 @@ def ticket(path):
 def changeTicket(path):
     user=request.args.get('user')
     hash=request.args.get('hash')
-    print(request.json)
+    #print(request.json)
     status= request.json["status"]
-    print(request.args)
+    #print(request.args)
     userDict = temp.users
     isAdmin=False
     if user != None:
@@ -177,16 +177,55 @@ def changeTicket(path):
         data = {}
         if userDict[user]["admin"]:
             data = tmpdata
-            print(f"data is{data}")
-            print(f"data is type: {type(data)}")
+            #print(f"data is{data}")
+            #print(f"data is type: {type(data)}")
             data["status"] = status
-            print(f"data is now{data}")
+            #print(f"data is now{data}")
             temp.data[path] = data
             writeData(temp.data, "data.json")
             isAdmin = True
         else:
             if user in tmpdata["users"]:
                 data = tmpdata
+    else:
+        data={}
+    return redirect('/')
+
+
+@app.route('/ticket/<path:path>/newMessage', methods=['POST'])
+def newMessage(path):
+    user=request.args.get('user')
+    hash=request.args.get('hash')
+    #print(request.json)
+    body = request.json
+    message= body["message"]
+    #print(request.args)
+    userDict = temp.users
+    isAdmin=False
+    if user != None:
+        data = {}
+        try:
+            if userDict[user]["hash"] == hash:
+                print("auth ok")
+            else:
+                print("auth failed")
+        except:
+            print("user does not exist")
+            return request_finished
+        tmpdata = temp.data[path]
+        if userDict[user]["admin"]:
+            data = tmpdata
+            #print(f"data is{data}")
+            #print(f"data is type: {type(data)}")
+            data["comments"].append(message)
+            #print(f"data is now{data}")
+            temp.data[path] = data
+            writeData(temp.data, "data.json")
+            isAdmin = True
+        else:
+            if user in tmpdata["users"]:
+                data = tmpdata
+                data["comments"].append(message)
     else:
         data={}
     return redirect('/')
