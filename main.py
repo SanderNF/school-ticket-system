@@ -89,11 +89,13 @@ def index():
                 print("auth ok")
             else:
                 print("auth failed")
+                return redirect('/logedOut')
         except:
-            userDict[user] = {"hash": hash}
+            userDict[user] = {"hash": hash, "admin": False}
             writeData(userDict, "users.json")
             temp.users = readData("users.json")
             print("user does not exist")
+            return redirect('/')
         tmpdata = temp.data
         #print(tmpdata)
         #data = json.dumps(data)
@@ -111,6 +113,23 @@ def index():
         data={}
     return render_template('index.html', data=data)
 
+
+@app.route('/logedOut')
+def logedOut():
+    site = """
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+    </head>
+    <body>
+    <script>
+        localStorage.clear()
+        window.location.href = (window.location.href.split("?")[0].split("logedOut")[0])
+    </script>
+    </body>
+    """
+    return site
+
 @app.route('/ticket/<path:path>', methods=['GET'])
 def ticket(path):
     user=request.args.get('user')
@@ -125,11 +144,13 @@ def ticket(path):
                 print("auth ok")
             else:
                 print("auth failed")
+                return redirect('/logedOut')
         except:
             userDict[user] = {"hash": hash, "admin": False}
             writeData(userDict, "users.json")
             temp.users = readData("users.json")
             print("user does not exist")
+            return redirect('/')
         tmpdata = temp.data[path]
         #print(tmpdata)
         #data = json.dumps(data)
