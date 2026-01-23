@@ -132,12 +132,15 @@
         <h1>{{ data.title }}</h1>
         <p>{{ data.body }}</p>
         {% if isAdmin %}
-            <select name="status" id="status-select" onchange="changeStatus()">
-                {% if data.status == "open" %}
+            
+            {% if data.status == "open" %}
+            <select name="status" class="Azure" id="status-select" onchange="changeStatus()">
                 <option value="" class="Azure">Open 
             {% elif data.status == "wip" %}
+            <select name="status" class="Purple" id="status-select" onchange="changeStatus()">
                 <option value="" class="Purple">W.I.P 
             {% elif data.status == "closed" %}
+            <select name="status" class="Green" id="status-select" onchange="changeStatus()">
                 <option value="" class="Green">Closed 
             {% endif %}</option>
                 <option value="open" class="Azure">Make: Open </option>
