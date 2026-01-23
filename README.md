@@ -41,6 +41,9 @@ if you're using ufw then run the following
 ufw allow 5501/tcp
 ```
 
+## Website
+the website should be on **http://127.0.0.1:5501/**
+
 ## file structure
 
 ```r
