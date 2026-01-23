@@ -43,7 +43,7 @@ ufw allow 5501/tcp
 
 ## file structure
 
-```
+```r
 .
 ├── images
 │   ├── index.png                   #Picture of the main page.
@@ -73,7 +73,7 @@ ufw allow 5501/tcp
 **GET `/`**
 serves the main page (renderd template)
 Params:
-```shell
+```r
 user = str # the user's username
 hash = str # the user's hash (SHA-256)
 ```
@@ -102,7 +102,7 @@ Returns: html page that clears the saved username and hash before reloading the 
 **GET `/ticket/\<ticket-id>/`**
 serves the ticket page (renderd template)
 Params:
-```shell
+```r
 user = str # the user's username
 hash = str # the user's hash (SHA-256)
 ```
@@ -117,7 +117,7 @@ Returns: templates/ticket.html
 **POST `/ticket/\<ticket-id>/`**\
 This changes the ticket status\
 Params:
-```shell
+```r
 user = str # the user's username
 hash = str # the user's hash (SHA-256)
 ```
@@ -134,7 +134,7 @@ Returns: Nothing
 **POST `/ticket/\<ticket-id>/newMessage/`**\
 This adds a comment to the ticket\
 Params:
-```shell
+```r
 user = str # the user's username
 hash = str # the user's hash (SHA-256)
 ```
@@ -154,7 +154,7 @@ Returns: Nothing
 **POST `/new/ticket/`**\
 This adds a comment to the ticket\
 Params:
-```shell
+```r
 user = str # the user's username
 hash = str # the user's hash (SHA-256)
 ```
