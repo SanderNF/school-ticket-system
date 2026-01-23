@@ -173,3 +173,12 @@ body:
 }
 ```
 Returns: Nothing
+
+
+
+
+# What did i learn from this?
+
+did you expect me to learn something from this???\
+it's a simple flask server and a database.\
+i have made flask sites before and simple databases are easy.
