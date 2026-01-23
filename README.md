@@ -73,8 +73,8 @@ the website should be on **http://127.0.0.1:5501/**
 
 ## API referance
 
-**GET `/`**
-serves the main page (renderd template)
+**GET `/`**\
+serves the main page (renderd template)\
 Params:
 ```r
 user = str # the user's username
@@ -88,8 +88,8 @@ Returns: templates/index.html
 
 <br><br>
 
-**GET `/logedOut`**
-forces the user to be loged out
+**GET `/logedOut`**\
+forces the user to be loged out\
 Params:
 ```python
 None
@@ -102,8 +102,8 @@ Returns: html page that clears the saved username and hash before reloading the 
 
 <br><br>
 
-**GET `/ticket/\<ticket-id>/`**
-serves the ticket page (renderd template)
+**GET `/ticket/\<ticket-id>/`**\
+serves the ticket page (renderd template)\
 Params:
 ```r
 user = str # the user's username
