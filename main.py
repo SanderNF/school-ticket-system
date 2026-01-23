@@ -83,7 +83,8 @@ def index():
     #print(request.args)
     userDict = temp.users
     if user != None:
-        
+        temp.data = readData("data.json")
+        temp.users = readData("users.json")
         try:
             if userDict[user]["hash"] == hash:
                 print("auth ok")
@@ -138,7 +139,8 @@ def ticket(path):
     userDict = temp.users
     isAdmin=False
     if user != None:
-        
+        temp.data = readData("data.json")
+        temp.users = readData("users.json")
         try:
             if userDict[user]["hash"] == hash:
                 print("auth ok")
@@ -180,7 +182,8 @@ def changeTicket(path):
     userDict = temp.users
     isAdmin=False
     if user != None:
-        
+        temp.data = readData("data.json")
+        temp.users = readData("users.json")
         try:
             if userDict[user]["hash"] == hash:
                 print("auth ok")
