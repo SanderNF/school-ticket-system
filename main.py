@@ -1,6 +1,9 @@
 import json
 from flask import Flask, render_template, request, redirect, Response, stream_with_context, request_finished
-
+#from OpenSSL import SSL
+#context = SSL.Context(SSL.PROTOCOL_TLSv1_2)
+#context.use_privatekey_file('server.key')
+#context.use_certificate_file('server.crt')   
 
 
 app = Flask(__name__)
@@ -277,4 +280,4 @@ if __name__ == '__main__':
     #newTicket("test")
     temp.data = readData("data.json")
     temp.users = readData("users.json")
-    app.run(host='0.0.0.0', port=5501, debug=True)
+    app.run(host='0.0.0.0', port=5501, debug=True, ssl_context=('.cert/server.crt', '.cert/server.key'))
